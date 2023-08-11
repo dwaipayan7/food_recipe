@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:food_recipe/home.dart';
+import 'package:food_recipe/views/login.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
             seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: Home(),
+      home: Login(),
     );
   }
 }
