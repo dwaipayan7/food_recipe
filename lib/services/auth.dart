@@ -1,29 +1,58 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 final GoogleSignIn googleSignIn = GoogleSignIn();
 
-//signIn
-Future<User?> signInWIthGoogle() async{
-  final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
-  final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount!.authentication;
-//
-  final AuthCredential credential = GoogleAuthProvider.credential(
-    idToken: googleSignInAuthentication.idToken,
-    accessToken: googleSignInAuthentication.accessToken
-  );
-//sign in with credintial user class
-   final userCredential = await _auth.signInWithCredential(credential);
-   final User? user = userCredential.user;
-// Checking
-   assert(user!.isAnonymous);
-   assert(await user!.getIdToken() != null);
+//SIGN IN KA Function
+Future<User?> signInWithGoogle() async
+{
+  try{
 
-   final User? currentUser = await _auth.currentUser;
-   assert(currentUser!.uid == user!.uid);
 
-   return user;
+    //SIGNING IN WITH GOOGLE
+    final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
+    final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount!.authentication;
 
+    //CREATING CREDENTIAL FOR FIREBASE
+    final AuthCredential credential = GoogleAuthProvider.credential(
+        idToken: googleSignInAuthentication.idToken,
+        accessToken: googleSignInAuthentication.accessToken
+    );
+
+    //SIGNING IN WITH CREDENTIAL & MAKING A USER IN FIREBASE  AND GETTING USER CLASS
+    final userCredential  = await _auth.signInWithCredential(credential);
+    final User? user = userCredential.user;
+
+    //CHECKING IS ON
+    assert(!user!.isAnonymous);
+    assert(await user!.getIdToken() != null);
+
+    final User? currentUser = await _auth.currentUser;
+    assert(currentUser!.uid == user!.uid);
+    if (kDebugMode) {
+      print(user);
+    }
+    // LocalDataSaver.saveLoginData(true);
+    // LocalDataSaver.saveName(user!.displayName.toString());
+    // LocalDataSaver.saveMail(user.email.toString());
+    // LocalDataSaver.saveImg(user.photoURL.toString());
+
+    return user;
+  }catch(e){
+    if (kDebugMode) {
+      print(e);
+    }
+  }
+  return null;
+
+}
+
+Future<String> signOut() async
+{
+  await googleSignIn.signOut();
+  await _auth.signOut();
+  return "SUCCESS";
 }

@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
             seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: Login(),
+      home: Home(),
     );
   }
 }
