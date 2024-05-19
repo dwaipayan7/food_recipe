@@ -10,9 +10,7 @@ Features
 5>User Authentication: Sign up and log in to save and manage your favorite recipes.
 6>Responsive Design: A user-friendly interface that works seamlessly on both iOS and Android devices.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
 
 
 
